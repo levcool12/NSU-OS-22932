@@ -1,0 +1,7 @@
+0a
+1) по пути C:\Users\lev\Documents\study\cpp\Project1\Project1\x64\Debug создаются 3 .obj файла
+2) убедился
+3)john '\n' james
+4)ошибка т.к. getMyName используется 2 раза
+5) создана ф-ция
+6)добавить пространство имен using namespace std;
