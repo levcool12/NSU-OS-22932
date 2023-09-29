@@ -12,8 +12,7 @@
 4. Создать любой файл через проводник, можно пустой
 5. Ввести "git add ."
 6. git commit -m "любое сообщение на английском"
-7. github git remote add origin
-8. git push origin main
+7. git push
 
 Этап 3
 1. Зайти в своем профиле GitHub в скопированный репозиторий 
