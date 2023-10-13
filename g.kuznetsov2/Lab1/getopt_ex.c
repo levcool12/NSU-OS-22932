@@ -48,19 +48,25 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <ulimit.h>
 #include <sys/resource.h>
 
 extern char **environ;
 
 void main(int argc, char *argv[]) {
     struct rlimit limits;
-    char options[] = "cuvfspidg:C:V:"; /* valid options */
+    char options[] = "cuvfspidC:V:U:"; /* valid options */
     int c, invalid = 0, dflg = 0, fflg = 0, gflg = 0;
     char *f_ptr, *g_ptr;
 
     printf("argc equals %d\n", argc);
     while ((c = getopt(argc, argv, options)) != EOF) {
         switch (c) {
+            case 'U':{
+                if (ulimit(UL_SETFSIZE,atol(optarg)) == -1)
+                    printf("Error ulimit\n");
+                break;
+            }
             case 'i':
                 printf("---i---\nuser id is %d\n", getuid());
                 printf("effective user id is %d\n", geteuid());
