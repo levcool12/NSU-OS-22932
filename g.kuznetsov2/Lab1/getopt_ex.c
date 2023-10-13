@@ -1,49 +1,3 @@
-//#include <stdlib.h>
-//#include <stdio.h>
-//#include <unistd.h>
-//
-//void main(int argc, char *argv[]){
-//     char options[ ] = "f:dg:";  /* valid options */
-//     int c, invalid = 0, dflg = 0, fflg = 0, gflg = 0;
-//     char *f_ptr, *g_ptr;
-//
-//     printf("argc equals %d\n", argc);
-//     while ((c = getopt(argc, argv, options)) != EOF) {
-//         printf("user id is %d\n", getuid());
-//         printf("effective user id is %d\n", geteuid());
-//      switch (c) {
-//          case 'i':
-//              printf("user id is %d\n", getuid());
-//              printf("effective user id is %d\n", geteuid());
-//              break;
-//          case 'd':
-//              char *path = (char*) calloc(1024, 1);
-//              getcwd(path, 1024);
-//              printf("current directory is %s\n", path);
-//              break;
-//      case 'f':
-//          fflg++;
-//          f_ptr = optarg;
-//          break;
-//      case 'g':
-//          gflg++;
-//          g_ptr = optarg;
-//          break;
-//      case '?':
-//          printf("invalid option is %c\n", optopt);
-//          invalid++;
-//      }
-//     }
-//     printf("dflg equals %d\n", dflg);
-//     if(fflg)
-//      printf("f_ptr points to %s\n", f_ptr);
-//     if(gflg)
-//      printf("g_ptr points to %s\n", g_ptr);
-//     printf("invalid equals %d\n", invalid);
-//     printf("optind equals %d\n", optind);
-//     if(optind < argc) printf("next parameter = %s\n", argv[optind]);
-//}
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -92,10 +46,6 @@ void main(int argc, char *argv[]) {
                 break;
             case 'v':
                 printf("---v---\n");
-//                char *val;
-//                val = getenv("HOME");
-//                if(val) printf("val is %s\n", val);
-//                else printf("error in getting val\n");
                 char **env = environ;
                 while (*env != NULL) {
                     printf("%s\n---------------------------\n", *env);
@@ -170,15 +120,3 @@ void main(int argc, char *argv[]) {
     printf("optind equals %d\n", optind);
     if (optind < argc) { printf("next parameter = %s\n", argv[optind]); }
 }
-
-//осталось сделать
-//V-i  Печатает реальные и эффективные идентификаторы пользователя и группы.
-//V-s  Процесс становится лидером группы. Подсказка: смотри setpgid(2).
-//V-p  Печатает идентификаторы процесса, процесса-родителя и группы процессов.
-//V-u  Печатает значение ulimit
-//?-        Unew_ulimit  Изменяет значение ulimit. Подсказка: смотри atol(3C) на странице руководства strtol(3C)
-//V-c  Печатает размер в байтах core-файла, который может быть создан.
-//V-         Csize  Изменяет размер core-файла
-//V-d  Печатает текущую рабочую директорию
-//V-v  Распечатывает переменные среды и их значения
-//-         Vname=value  Вносит новую переменную в среду или изменяет значение существующей переменной.
