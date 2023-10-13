@@ -69,8 +69,8 @@ int main(int argc, char* argv[], char** envp) {
 				break;
 			case 'i':
 				printf("real user ID %d\n", getuid());
-				printf("effective user ID %d\n", getgid());
-				printf("real ID of the group %d\n", geteuid());
+				printf("effective user ID %d\n", geteuid());
+				printf("real ID of the group %d\n", getgid());
 				printf("effective group ID %d\n", getegid());
 				break;
 			case 's':
