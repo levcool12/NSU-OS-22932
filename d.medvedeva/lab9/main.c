@@ -1,13 +1,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <sys/wait.h>
 
-#define BUFFER_SIZE 128
-
 int main() {
-    int descriptor = open("test.txt", O_RDONLY);
     pid_t process_id = fork();
     switch (process_id) {
         case -1:
@@ -17,13 +13,7 @@ int main() {
             printf(" CHILD: This is a descendant process!\n");
             printf(" CHILD: My PID is %d\n", getpid());
             printf(" CHILD: PID of my parent is %d\n", getppid());
-
-            char buffer[BUFFER_SIZE];
-            long read_size;
-            while ((read_size = read(descriptor, buffer, BUFFER_SIZE)) > 0)
-                write(1, buffer, read_size);
-            close(descriptor);
-
+            execlp("cat", "cat", "test.txt", NULL);
             printf(" CHILD: Exit!\n");
             exit(0);
         default:
@@ -34,6 +24,5 @@ int main() {
             wait(0);
             printf("PARENT: Exit!\n");
     }
-    close(descriptor);
     return 0;
 }
