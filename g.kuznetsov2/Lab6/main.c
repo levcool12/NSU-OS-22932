@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #define BUF_LEN 5000000
 
@@ -27,7 +28,9 @@ void addToArr(unsigned long long *arr, unsigned int *pos, unsigned int *len, uns
 
 void findLines(const char *buf, File *file, int maxLen){
 //    while(buf[i] != '\000') {
-    for(int i = 0; i < maxLen; i++) if (buf[i] == '\n') addToArr(file->stringPositions, &file->lines, &file->arrLen, i + file->lastPos);
+    for(int i = 0; i < maxLen; i++)
+        if (buf[i] == '\n')
+            addToArr(file->stringPositions, &file->lines, &file->arrLen, i + file->lastPos);
     file->lastPos += maxLen;
 }
 
@@ -55,7 +58,7 @@ int main(int argc, char *argv[]) {
     }
     int strNum = 1;
     while(strNum != 0){
-        signal(SIGALRM, MyAlarm);
+        signal(SIGALRM, timeoutAlarm);
         alarm(5);
         close(fd);
         printf("\n|Enter number of string, you want to see|\n");
