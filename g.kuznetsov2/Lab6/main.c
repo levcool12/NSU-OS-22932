@@ -11,6 +11,11 @@ typedef struct File{
     unsigned long long *stringPositions;
 } File;
 
+void timeoutAlarm(){
+    printf("program was inactive for 5 seconds and it has been killed");
+    exit(0);
+}
+
 void addToArr(unsigned long long *arr, unsigned int *pos, unsigned int *len, unsigned long long n){
     if(*pos >= *len){
         *len += 20;
@@ -50,6 +55,8 @@ int main(int argc, char *argv[]) {
     }
     int strNum = 1;
     while(strNum != 0){
+        signal(SIGALRM, MyAlarm);
+        alarm(5);
         close(fd);
         printf("\n|Enter number of string, you want to see|\n");
         scanf("%d", &strNum);
