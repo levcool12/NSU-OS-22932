@@ -17,11 +17,9 @@ int file = 0;
 
 void a_alarm(int t) {
 	char buf[100];
-	for (int i = 0; i <= table.currentLen; i++) {
-		lseek(file, table.seek[i], SEEK_SET);
-		read(file, buf, table.lenStr[i] * sizeof(char));
-		printf("%s\n", buf);
-	}
+	lseek(file, 0, SEEK_SET);
+	read(file, buf, 100);
+	printf("%s", buf);
 	exit(0);
 }
 
