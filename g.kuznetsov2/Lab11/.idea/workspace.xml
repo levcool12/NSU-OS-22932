@@ -10,9 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3aaf0163-21c1-415f-9c89-0165b6f72334" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tst.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab16/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab16/a.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab16/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab16/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,9 +24,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2XKla0k445fehEQ8IV51L7xGvDH" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -42,7 +41,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/kuzga/Desktop/NSU-OS-22932/g.kuznetsov2/Lab16/main.c",
+    "last_opened_file_path": "C:/Users/kuzga/Desktop/NSU-OS-22932/g.kuznetsov2/Lab8/block.c",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -67,6 +66,7 @@
       <option name="presentableId" value="Default" />
       <updated>1698385711461</updated>
       <workItem from="1698385712567" duration="2811000" />
+      <workItem from="1698396054759" duration="28000" />
     </task>
     <servers />
   </component>

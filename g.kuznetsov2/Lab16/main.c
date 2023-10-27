@@ -4,22 +4,23 @@
 #include <unistd.h>
 
 int main() {
-    struct termios original_termios, new_termios;
+    //create termios struct (it keep all adjustments for using terminal)
+    struct termios cur_termios;
     char c;
-
-    // Save original terminal settings
-    tcgetattr(STDIN_FILENO, &original_termios);
-    new_termios = original_termios;
-
-    // Disable canonical mode and echo
-    new_termios.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
+    tcgetattr(STDIN_FILENO, &cur_termios);
+    //make new settings (ECHO = show symbols, that appear in console), (ICANON ~= EOF after any symbol)
+    // new_termios.c_lflag &= ~(ICANON | ECHO);
+    cur_termios.c_lflag &= ~(ICANON);
+    //set new settings (TCSANOW = set these settings right now)
+    tcsetattr(STDIN_FILENO, TCSANOW, &cur_termios);
 
     printf("Press a key (without enter)");
     c = getchar();
-    // Restore original terminal settings
 
     printf("\nYou pressed '%c'\n", c);
-    tcsetattr(STDIN_FILENO, TCSANOW, &original_termios);
+    //make origin settings
+    cur_termios.c_lflag |= (ICANON);
+    //set origin settins
+    tcsetattr(STDIN_FILENO, TCSANOW, &cur_termios);
     return 0;
 }
