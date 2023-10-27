@@ -1,0 +1,3 @@
+all: task9
+	gcc task9.c -o task9
+
