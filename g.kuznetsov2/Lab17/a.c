@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
-//#include <conio.h>
 #include <errno.h>
+#include <string.h>
 #define BUF_SIZE 100
 
 typedef struct TerminalString{
@@ -13,6 +13,7 @@ typedef struct TerminalString{
     unsigned int cols;
     unsigned int size;
     unsigned int length;
+    unsigned int pointer;
 } TS;
 
 struct termios default_settings;
@@ -34,7 +35,10 @@ void TS_init(TS *ts){
 
 void TS_append(TS *ts, char ch){
 //    char tmp = '|';
-//    if(ch == '\n') write(STDOUT_FILENO, &tmp, sizeof(char));
+//    if(ch == '\n'){
+//        write(STDOUT_FILENO, &tmp, sizeof(char));
+//        return;
+//    }
     if(!isprint(ch) && ch != '\n') return;
     if(ts->length + 1 == ts->size){
         ts->str = (char*) realloc(ts->str, sizeof(char) * ts->size + ts->cols);
@@ -60,6 +64,27 @@ void TS_kill(TS *ts){
     }
 }
 
+void TS_erase_word(TS *ts){
+    if(ts->length == 0) return;
+//    printf(":%c:", ts->length);
+//    write(STDOUT_FILENO, "::", sizeof(char) * 2);
+    while(ts->length > 1 && isspace(ts->str[ts->length - 1])){
+        ts->length--;
+        write(STDOUT_FILENO, "\b \b", sizeof(char) * 3);
+    }
+    while(ts->length > 0 && !isspace(ts->str[ts->length - 1])){
+        ts->length--;
+        write(STDOUT_FILENO, "\b \b", sizeof(char) * 3);
+    }
+}
+
+void TS_Cd(){
+    recoverDefaultSetting();
+    char buf[] = "\nYou've ended text program\n\000";
+    write(STDOUT_FILENO, buf, sizeof(char) * strlen(buf));
+    exit(0);
+}
+
 void type_kill(){
     char c = 21; // ASCII value of CTRL-U (VKILL)
     ioctl(STDIN_FILENO, TIOCSTI, &c);
@@ -74,7 +99,7 @@ int main() {
     tcgetattr(STDIN_FILENO, &terminal_settings);
     default_settings = terminal_settings;
     terminal_settings.c_lflag &= ~(ICANON | ECHO);
-    terminal_settings.c_cc[VMIN] = 1;
+//    terminal_settings.c_cc[VMIN] = 1;
     tcsetattr(STDIN_FILENO, TCSANOW,  &terminal_settings);
 
     char ch;
@@ -90,41 +115,18 @@ int main() {
             perror("Can't open the file :(\n");
             exit(1);
         }
-//        printf("%d ", ts.length);
-//        int intChar = getchar();
-//        printf("%d", intChar);
-//        if(intChar == EOF) break;
-//        if(ch == '\000') continue;
-//        printf("%c", ch);
 //        if(ts.length == 16){
 //            type_kill();
 //            ts.length++;
 //        }
-        else if(terminal_settings.c_cc[VERASE] == ch) TS_erase(&ts);
-        else if(terminal_settings.c_cc[VKILL] == ch) TS_kill(&ts);
-        else if('\n' == ch)
-            TS_append(&ts, '\n');
-        else if(isprint(ch)){
-            TS_append(&ts, ch);
-        } else{
-            write(STDOUT_FILENO, "\a", sizeof(char));
-        }
+        else if(terminal_settings.c_cc[VEOF] == ch) TS_Cd();               //do smth (CTRL+D)
+        else if(terminal_settings.c_cc[VWERASE] == ch) TS_erase_word(&ts);//erase word (CTRL+W)
+        else if(terminal_settings.c_cc[VERASE] == ch) TS_erase(&ts);     //backspace
+        else if(terminal_settings.c_cc[VKILL] == ch) TS_kill(&ts);      //kill (21th ASCII symbol)
+        else if('\n' == ch) TS_append(&ts, '\n');                  //type enter
+        else if(isprint(ch)) TS_append(&ts, ch);                      //type any typable symbol
+        else write(STDOUT_FILENO, "\a", sizeof(char));    //type bell symbol if there was no typeble symbols and some particular symbols
     }
-//
-//    char *buf = (char*) calloc(BUF_SIZE, sizeof(char));
-//    int pointer = 0;
-
-//    scanf("%c", &ch);
-//    while(ch){
-//        buf[pointer] = ch;
-//        pointer++;
-//        printf("%s", buf);
-//        scanf("%c", &ch);
-//    }
-//
-//    terminal_settings.c_lflag |= ICANON | ECHO;
-//    tcsetattr(STDIN_FILENO, TCSANOW,  &terminal_settings);
-
     recoverDefaultSetting();
     printf("End\n");
     return 0;
