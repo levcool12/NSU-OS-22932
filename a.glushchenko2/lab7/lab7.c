@@ -2,54 +2,73 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <signal.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 #define MAX_LINE_LENGTH 100
 
-int file = 0;
 int length = 0;
-struct stat myStat;
+int file;
 
 void MyAlarm(int var) {
-    char* buffer = (char*)malloc(sizeof(char) * length);
+    struct stat myStat;
     fstat(file, &myStat);
-    char* map = mmap(NULL, myStat.st_size, PROT_READ, MAP_PRIVATE, file, 0);
+    off_t sizeFile = myStat.st_size;
+
+    char* buf = (char*)mmap(NULL, sizeFile, PROT_READ, MAP_PRIVATE, file, 0);
+    fwrite(buf, sizeof(char), sizeFile, stdout);
     printf("Your time is out\n");
-    printf("%s\n", map);
-    munmap(map, myStat.st_size);
     exit(0);
 }
 
 int main(int argc, char* argv[]) {
     file = open(argv[1], O_RDONLY);
-    char buffer[MAX_LINE_LENGTH];
+    if (file == -1) {
+        perror("File open error");
+        exit(1);
+    }
+    struct stat myStat;
+    fstat(file, &myStat);
+    off_t sizeFile = myStat.st_size;
+    char* buf = (char*)mmap(NULL, sizeFile, PROT_READ, MAP_PRIVATE, file, 0);
 
-    int nline = 1, num_line;
+    off_t file_size = 0;
+    int res = 0;
+    while ((res = read(file, NULL, 1)) > 0) {
+        file_size += res;
+    }
+    if (res == -1) {
+        perror("File read error");
+        exit(1);
+    }
+    length = file_size;
+
+    char* buffer = (char*)mmap(NULL, file_size, PROT_READ, MAP_PRIVATE, file, 0);
+    if (buffer == MAP_FAILED) {
+        perror("File mapping error");
+        exit(1);
+    }
+
+    int nline = 1;
     int lens[100];
     int ind[100];
 
-    struct stat myStat;
-    fstat(file, &myStat);
-    char* map = mmap(NULL, myStat.st_size, PROT_READ, MAP_PRIVATE, file, 0);
-
-    for (int i = 0; i < myStat.st_size; i++) {
-        length += 1;
-        if (nline > 1 && map[i] == '\n') {
-            ind[nline] = length;
+    for (int i = 0; i < file_size; i++) {
+        if (nline > 1 && buffer[i] == '\n') {
+            ind[nline] = i + 1;
             lens[nline] = ind[nline] - ind[nline - 1] - 1;
             nline += 1;
         }
-        else if (map[i] == '\n' && nline == 1) {
+        else if (buffer[i] == '\n' && nline == 1) {
             lens[0] = 0;
             ind[0] = 0;
-            ind[1] = length;
+            ind[1] = i + 1;
             lens[1] = i;
             nline += 1;
         }
     }
-    ind[nline] = length;
+    ind[nline] = file_size;
     lens[nline] = ind[nline] - ind[nline - 1];
 
     signal(SIGALRM, MyAlarm);
@@ -57,7 +76,11 @@ int main(int argc, char* argv[]) {
     alarm(5);
 
     while (1) {
-        scanf("%d", &num_line);
+        int num_line;
+        if (scanf("%d", &num_line) != 1) {
+            perror("Scanf error");
+            exit(1);
+        }
 
         alarm(5);
 
@@ -65,19 +88,16 @@ int main(int argc, char* argv[]) {
             break;
         }
         else if (num_line < 1 || num_line > nline) {
-            perror("Invalid number of line");
+            fwrite("Invalid number of line\n", sizeof(char), 23, stdout);
         }
         else {
-            char* line = (char*)malloc(sizeof(char) * (lens[num_line] + 1));
-            lseek(file, ind[num_line - 1], SEEK_SET);
-            read(file, line, lens[num_line]);
-            line[lens[num_line]] = '\0';
-            printf("%s\n", line);
-            free(line);
+            fwrite(buffer + ind[num_line - 1], sizeof(char), lens[num_line], stdout);
+            fwrite("\n", sizeof(char), 1, stdout);
         }
     }
 
-    munmap(map, myStat.st_size);
+    munmap(buffer, file_size);
     close(file);
+
     return 0;
 }
