@@ -8,17 +8,17 @@
 
 #define MAX_LINE_LENGTH 100
 
+struct stat myStat;
 int length = 0;
-int file;
+int file = 0;
 
 void MyAlarm(int var) {
-    struct stat myStat;
     fstat(file, &myStat);
     off_t sizeFile = myStat.st_size;
 
     char* buf = (char*)mmap(NULL, sizeFile, PROT_READ, MAP_PRIVATE, file, 0);
     fwrite(buf, sizeof(char), sizeFile, stdout);
-    printf("Your time is out\n");
+    printf("\nYour time is out");
     exit(0);
 }
 
@@ -28,27 +28,15 @@ int main(int argc, char* argv[]) {
         perror("File open error");
         exit(1);
     }
-    struct stat myStat;
+
     fstat(file, &myStat);
     off_t sizeFile = myStat.st_size;
     char* buf = (char*)mmap(NULL, sizeFile, PROT_READ, MAP_PRIVATE, file, 0);
 
-    off_t file_size = 0;
-    int res = 0;
-    while ((res = read(file, NULL, 1)) > 0) {
-        file_size += res;
-    }
-    if (res == -1) {
-        perror("File read error");
-        exit(1);
-    }
+    off_t file_size = sizeFile;
     length = file_size;
 
     char* buffer = (char*)mmap(NULL, file_size, PROT_READ, MAP_PRIVATE, file, 0);
-    if (buffer == MAP_FAILED) {
-        perror("File mapping error");
-        exit(1);
-    }
 
     int nline = 1;
     int lens[100];

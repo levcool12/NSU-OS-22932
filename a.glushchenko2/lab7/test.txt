@@ -1,3 +1,0 @@
-first
-snd
-third_str
