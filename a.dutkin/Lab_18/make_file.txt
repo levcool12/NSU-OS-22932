@@ -1,0 +1,2 @@
+all: task18
+	gcc task18.c -o task18
