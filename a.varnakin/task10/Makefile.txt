@@ -1,0 +1,3 @@
+all: task10
+	gcc task10.c -o task10
+
