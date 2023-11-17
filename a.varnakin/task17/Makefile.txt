@@ -1,0 +1,3 @@
+all: task17
+	gcc task17.c -o task17
+
