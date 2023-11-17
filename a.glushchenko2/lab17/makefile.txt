@@ -1,0 +1,2 @@
+gcc lab17.c
+./a.out
