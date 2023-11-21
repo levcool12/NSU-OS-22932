@@ -56,7 +56,7 @@ int main() {
             while (i >= 0 && input[i] != ' ') {
                 i--;
             }
-            input[i + 1] = '\0';
+            input[len - i] = '\0';
 
             printf("\033[%dD\033[K", len - i - 1);
             fflush(stdout);
