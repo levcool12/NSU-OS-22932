@@ -1,0 +1,23 @@
+Hello, World!
+chmod 777 file.txt
+Something else?
+2
+Hello, World!
+chmod 777 file.txt
+Something else?
+3
+Hello, World!
+chmod 777 file.txt
+Something else?
+4
+Hello, World!
+chmod 777 file.txt
+Something else?
+5
+Hello, World!
+chmod 777 file.txt
+Something else?
+6
+Hello, World!
+chmod 777 file.txt
+Something else?
