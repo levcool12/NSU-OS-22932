@@ -1,0 +1,8 @@
+task17: task17.o
+	gcc task17.o -o task17
+
+task17.o: task17.c
+	gcc -Wall -c task17.c
+
+clean:
+	rm task17 task17.o
