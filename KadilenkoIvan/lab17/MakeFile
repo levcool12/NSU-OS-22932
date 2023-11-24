@@ -1,0 +1,2 @@
+main: lab17.c
+	gcc -o lab17 lab17.c 
