@@ -27,7 +27,6 @@ int main(int argc, char* argv[]) {
 	newTerm.c_lflag &= ~(ECHO | ICANON);
 	newTerm.c_cc[VMIN] = 1;
 	tcsetattr(0, TCSANOW, &newTerm);
-	printf("%d\n", tcgetattr(0, &newTerm));
 
 	Line line;
 	initLine(&line);
@@ -64,7 +63,8 @@ int main(int argc, char* argv[]) {
 			
 			printf("\033[%dD\033[K", count);
 			fflush(stdout);
-			line.str[l - count+1] = '\0';	
+			line.str[l - count] = '\0';	
+			
 		}
 		else {
 			if (isprint(symbol) == 0) {
